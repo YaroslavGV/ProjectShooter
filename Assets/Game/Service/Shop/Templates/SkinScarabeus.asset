@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0be76ba5c925374f9974c681a4bc826, type: 3}
+  m_Name: SkinScarabeus
+  m_EditorClassIdentifier: 
+  _price:
+    currency: {fileID: 11400000, guid: 7278f6bac78ecfa458c1efa9081d1f95, type: 2}
+    value: 15
+  _skin: {fileID: 3816136117012383700, guid: f0cd19c068f876e41988ad98e3e3aa1b, type: 3}

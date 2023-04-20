@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb073d842fd41041932f55f529768b6, type: 3}
+  m_Name: SlowGun
+  m_EditorClassIdentifier: 
+  _id: 1003
+  _icon: {fileID: 21300000, guid: 3b6b5da3e640ac040b69e928609faf39, type: 3}
+  _model: {fileID: 2832654191767220592, guid: 5bfa582183942514281ac2d0703f7566, type: 3}

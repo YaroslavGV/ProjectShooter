@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99184ef1c5db0844ea3dd86079144072, type: 3}
+  m_Name: SnipeBulletAsset
+  m_EditorClassIdentifier: 
+  _bullet: {fileID: 3622364088464320920, guid: 65d279e859a52b249ad63c20ae922307, type: 3}
+  _settings:
+    capacity: 16
+    type: 0
+    defultCapacity: 8
+  _effects:
+  - effect: {fileID: 7579564728718341947, guid: ea4d68ac85ec4364090f0d9d66ba8f68,
+      type: 3}
+    eventType: 0
+    changeParent: 1
+    poolSettings:
+      capacity: 8
+      type: 0
+      defultCapacity: 8
+  - effect: {fileID: 4950829269198977355, guid: 17207fb5e9d32da4fae201ce20a71101,
+      type: 3}
+    eventType: 1
+    changeParent: 0
+    poolSettings:
+      capacity: 8
+      type: 0
+      defultCapacity: 8
+  - effect: {fileID: 8804608344911516910, guid: 83de5b252cc9ab244a6d594f4076cf69,
+      type: 3}
+    eventType: 2
+    changeParent: 0
+    poolSettings:
+      capacity: 8
+      type: 0
+      defultCapacity: 8
