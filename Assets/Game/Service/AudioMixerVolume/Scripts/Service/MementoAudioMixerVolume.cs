@@ -2,28 +2,21 @@
 using UnityEngine;
 using Memento;
 
-public class MementoAudioMixerVolume : IJsonContent
+public class MementoAudioMixerVolume : AudioMixerVolume, IJsonContent
 {
-    private readonly AudioMixerVolume _audio;
-    private readonly AudioVolume _default;
+    public MementoAudioMixerVolume (AudioMixerReference audio) : base(audio) => OnChange += OnContentChange;
 
-    public MementoAudioMixerVolume (AudioMixerVolume audio, AudioVolume defaultVolume)
-    {
-        _audio = audio;
-        _default = defaultVolume;
-
-        _audio.OnChange += OnChange;
-    }
-
-    ~MementoAudioMixerVolume () => _audio.OnChange -= OnChange;
+    ~MementoAudioMixerVolume () => OnChange -= OnContentChange;
 
     public Action ContentUpdated { get; set; }
 
-    public string GetJson () => JsonUtility.ToJson(_audio.Volume);
+    public string GetJson () => JsonUtility.ToJson(Volume);
 
-    public void SetJson (string json) => _audio.Volume = JsonUtility.FromJson<AudioVolume>(json);
+    public void SetJson (string json) 
+    {
+        volume = JsonUtility.FromJson<AudioVolume>(json);
+        UpdateAudioMixer();
+    }
 
-    public void SetDefault () => _audio.Volume = _default;
-
-    private void OnChange () => ContentUpdated?.Invoke();
+    private void OnContentChange () => ContentUpdated?.Invoke();
 }

@@ -1,37 +1,18 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 using Memento;
 
-public class MementoSettings : IJsonContent
+public class MementoSettings : GameSettings, IJsonContent
 {
-    private readonly GameSettings _settings;
-    private readonly SettingsValues _default;
+    public MementoSettings () => OnChange += OnContentChange;
 
-    public MementoSettings (GameSettings settings, SettingsValues defaultValues)
-    {
-        _settings = settings;
-        _default = defaultValues;
-
-        _settings.OnChange += OnChange;
-    }
-
-    ~MementoSettings () => _settings.OnChange -= OnChange;
+    ~MementoSettings () => OnChange -= OnContentChange;
 
     public Action ContentUpdated { get; set; }
 
-    public string GetJson () => JsonUtility.ToJson(_settings.Values);
+    public string GetJson () => JsonUtility.ToJson(values);
 
-    public void SetJson (string json)
-    {
-        SettingsValues values = JsonUtility.FromJson<SettingsValues>(json);
-        _settings.Values = values;
-    }
+    public void SetJson (string json) => values = JsonUtility.FromJson<SettingsValues>(json);
 
-    public void SetDefault () 
-    { 
-        _settings.Values = _default;
-    }
-
-    private void OnChange () => ContentUpdated?.Invoke();
+    private void OnContentChange () => ContentUpdated?.Invoke();
 }

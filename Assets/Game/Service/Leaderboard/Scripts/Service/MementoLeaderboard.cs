@@ -6,7 +6,7 @@ using Memento;
 
 namespace LeaderboardSystem
 {
-    public class MementoLeaderboard : IJsonContent
+    public class MementoLeaderboard : Leaderboard, IJsonContent
     {
         [Serializable]
         private struct ScoreResultCollection
@@ -16,29 +16,23 @@ namespace LeaderboardSystem
             public ScoreResultCollection (IEnumerable<ScoreResult> results) => elements = results.ToArray();
         }
 
-        private readonly Leaderboard _leaderboard;
+        public MementoLeaderboard (int limit) : base(limit) => OnChange += OnContentChange;
 
-        public MementoLeaderboard (Leaderboard leaderboard) 
-        {
-            _leaderboard = leaderboard;
-
-            _leaderboard.OnChange += OnChange; 
-        }
-
-        ~MementoLeaderboard () => _leaderboard.OnChange -= OnChange;
+        ~MementoLeaderboard () => OnChange -= OnContentChange;
 
         public Action ContentUpdated { get; set; }
 
-        public string GetJson () => JsonUtility.ToJson(new ScoreResultCollection(_leaderboard.Results));
+        public string GetJson () => JsonUtility.ToJson(new ScoreResultCollection(Results));
 
         public void SetJson (string json)
         {
-            ScoreResultCollection results = JsonUtility.FromJson<ScoreResultCollection>(json);
-            _leaderboard.SetResults(results.elements);
+            ScoreResultCollection resultCollection = JsonUtility.FromJson<ScoreResultCollection>(json);
+            if (resultCollection.elements == null)
+                return;
+            results.Clear();
+            results.AddRange(resultCollection.elements);
         }
 
-        public void SetDefault () { }
-
-        private void OnChange () => ContentUpdated?.Invoke();
+        private void OnContentChange () => ContentUpdated?.Invoke();
     }
 }

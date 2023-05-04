@@ -18,17 +18,23 @@ namespace Currency
             if (string.IsNullOrEmpty(_saveKey))
                 throw new Exception("SaveKey is null or empty");
 
-            Wallet wallet = new Wallet();
+            MementoWallet wallet = new MementoWallet();
             Container.Bind<Wallet>().FromInstance(wallet).AsSingle();
-
-            MementoWallet mWallet = new MementoWallet(wallet, _default);
-            new JsonPlayerPrefsHandler(_saveKey, mWallet);
+            new JsonPlayerPrefsHandler(_saveKey, wallet, GetDefaultJson);
 
             if (_log)
             {
                 string text = ObjectLog.GetText(wallet, _saveKey);
                 Debug.Log(text);
             }
+        }
+
+        private string GetDefaultJson ()
+        {
+            MementoWallet defaultWallet = new MementoWallet();
+            foreach (CurrecnyValue cv in _default)
+                defaultWallet.AddFunds(cv.currency.Key, cv.value);
+            return defaultWallet.GetJson();
         }
 
         [ContextMenu("ClearData")]

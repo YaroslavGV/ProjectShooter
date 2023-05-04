@@ -7,6 +7,5 @@ namespace Memento
         public Action ContentUpdated { get; set; }
         public void SetJson (string json);
         public string GetJson ();
-        public void SetDefault ();
     }
 }

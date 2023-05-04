@@ -7,20 +7,15 @@ namespace Currency
     public class Wallet
     {
         public Action OnChange;
-        private readonly Dictionary<string, int> _currencys;
-
-        public Wallet ()
-        {
-            _currencys = new Dictionary<string, int>();
-        }
+        protected readonly Dictionary<string, int> currencys = new Dictionary<string, int>();
 
         public override string ToString () => 
-            string.Join(Environment.NewLine, _currencys.Select(c => string.Format("{0}: {1}", c.Key, c.Value)));
+            string.Join(Environment.NewLine, currencys.Select(c => string.Format("{0}: {1}", c.Key, c.Value)));
 
         public int GetFunds (string currencyKey)
         {
-            if (_currencys.ContainsKey(currencyKey))
-                return _currencys[currencyKey];
+            if (currencys.ContainsKey(currencyKey))
+                return currencys[currencyKey];
             return 0;
         }
 
@@ -43,24 +38,24 @@ namespace Currency
 
         public void Clear ()
         {
-            if (_currencys.Count > 0)
+            if (currencys.Count > 0)
             {
-                _currencys.Clear();
+                currencys.Clear();
                 OnChange?.Invoke();
             }
         }
 
         private void SetFunds (string currencyKey, int value)
         {
-            if (_currencys.ContainsKey(currencyKey))
-                _currencys[currencyKey] = value;
+            if (currencys.ContainsKey(currencyKey))
+                currencys[currencyKey] = value;
             else
-                _currencys.Add(currencyKey, value);
+                currencys.Add(currencyKey, value);
             OnChange?.Invoke();
         }
 
-        public bool ContainsCurrency (string currency) => _currencys.ContainsKey(currency);
+        public bool ContainsCurrency (string currency) => currencys.ContainsKey(currency);
 
-        public string[] GetCurrencys () => _currencys.Select(c => c.Key).ToArray();
+        public string[] GetCurrencys () => currencys.Select(c => c.Key).ToArray();
     }
 }

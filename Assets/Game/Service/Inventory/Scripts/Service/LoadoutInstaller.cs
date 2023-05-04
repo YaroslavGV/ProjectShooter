@@ -21,17 +21,23 @@ namespace InventorySystem
             if (_itemsDataBase == null)
                 throw new Exception("ItemsCollection is missing");
 
-            Loadout loadout = new Loadout();
+            MementoLoadout loadout = new MementoLoadout(_itemsDataBase);
             Container.Bind<Loadout>().FromInstance(loadout).AsSingle();
-
-            MementoLoadout mLoadout = new MementoLoadout(loadout, _itemsDataBase, _defaultItems.Equipment);
-            new JsonPlayerPrefsHandler(_saveKey, mLoadout);
+            new JsonPlayerPrefsHandler(_saveKey, loadout, GetDefaultJson);
 
             if (_log)
             {
                 string text = ObjectLog.GetText(loadout, _saveKey);
                 Debug.Log(text);
             }
+        }
+
+        private string GetDefaultJson ()
+        {
+            MementoLoadout defaultLoadout = new MementoLoadout(_itemsDataBase);
+            foreach (SlotKeyItem slotItem in _defaultItems.items)
+                defaultLoadout.Equipe(slotItem.PointItem);
+            return defaultLoadout.GetJson();
         }
 
         [ContextMenu("ClearData")]

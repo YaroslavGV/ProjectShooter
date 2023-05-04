@@ -19,11 +19,9 @@ namespace LeaderboardSystem
             if (_limit < 1)
                 throw new Exception("Limit must be a positive value");
 
-            Leaderboard leaderboard = new Leaderboard(_limit);
+            MementoLeaderboard leaderboard = new MementoLeaderboard(_limit);
             Container.Bind<Leaderboard>().FromInstance(leaderboard).AsSingle();
-
-            MementoLeaderboard mLeaderboard = new MementoLeaderboard(leaderboard);
-            new JsonPlayerPrefsHandler(_saveKey, mLeaderboard);
+            new JsonPlayerPrefsHandler(_saveKey, leaderboard);
 
             if (_log)
             {

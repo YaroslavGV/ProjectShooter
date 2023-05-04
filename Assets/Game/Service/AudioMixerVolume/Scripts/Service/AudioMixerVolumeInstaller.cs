@@ -11,7 +11,7 @@ public class AudioMixerVolumeInstaller : MonoInstaller
     [SerializeField] private AudioVolume _default = new AudioVolume(1, 1);
     [Space]
     [SerializeField] private bool _log = true;
-    private AudioMixerVolume _audioVolume;
+    private MementoAudioMixerVolume _audioVolume;
     private JsonPlayerPrefsHandler _jsonHandler;
 
     public override void InstallBindings ()
@@ -21,11 +21,9 @@ public class AudioMixerVolumeInstaller : MonoInstaller
         if (_audio.mixer == null || _audio.musicGroup == null || _audio.sfxGroup == null)
             throw new Exception("Audio references are not filled");
 
-        _audioVolume = new AudioMixerVolume(_audio);
+        _audioVolume = new MementoAudioMixerVolume(_audio);
         Container.Bind<AudioMixerVolume>().FromInstance(_audioVolume).AsSingle();
-
-        MementoAudioMixerVolume mAudio = new MementoAudioMixerVolume(_audioVolume, _default);
-        _jsonHandler = new JsonPlayerPrefsHandler(_saveKey, mAudio, false);
+        _jsonHandler = new JsonPlayerPrefsHandler(_saveKey, _audioVolume, GetDefaultJson, false);
     }
 
     public override void Start ()
@@ -38,6 +36,13 @@ public class AudioMixerVolumeInstaller : MonoInstaller
             string text = ObjectLog.GetText(_audioVolume, _saveKey);
             Debug.Log(text);
         }
+    }
+
+    private string GetDefaultJson ()
+    {
+        MementoAudioMixerVolume defaultAudioVolume = new MementoAudioMixerVolume(_audio);
+        defaultAudioVolume.Volume = _default;
+        return defaultAudioVolume.GetJson();
     }
 
     [ContextMenu("ClearData")]

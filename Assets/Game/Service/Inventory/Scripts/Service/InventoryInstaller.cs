@@ -22,11 +22,9 @@ namespace InventorySystem
                 throw new Exception("ItemsCollection is missing");
             _itemsDataBase.CheckIDCollision();
 
-            Inventory inventory = new Inventory();
+            MementoInventory inventory = new MementoInventory(_itemsDataBase);
             Container.Bind<Inventory>().FromInstance(inventory).AsSingle();
-
-            MementoInventory mInventory = new MementoInventory(inventory, _itemsDataBase, _defaultItems);
-            new JsonPlayerPrefsHandler(_saveKey, mInventory);
+            new JsonPlayerPrefsHandler(_saveKey, inventory, GetDefaultJson);
 
             if (_log)
             {
@@ -34,6 +32,14 @@ namespace InventorySystem
                 Debug.Log(text);
             }
         }
+
+        private string GetDefaultJson ()
+        {
+            MementoInventory defaultInventory = new MementoInventory(_itemsDataBase);
+            foreach (Item item in _defaultItems)
+                defaultInventory.AddItem(item);
+            return defaultInventory.GetJson();
+        } 
 
         [ContextMenu("ClearData")]
         private void ClearData ()

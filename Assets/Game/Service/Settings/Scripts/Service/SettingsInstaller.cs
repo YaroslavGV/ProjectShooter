@@ -15,17 +15,22 @@ public class SettingsInstaller : MonoInstaller
         if (string.IsNullOrEmpty(_saveKey))
             throw new Exception("SaveKey is null or empty");
 
-        GameSettings settings = new GameSettings();
+        MementoSettings settings = new MementoSettings();
         Container.Bind<GameSettings>().FromInstance(settings).AsSingle();
-
-        MementoSettings mSettings = new MementoSettings(settings, _default);
-        new JsonPlayerPrefsHandler(_saveKey, mSettings);
+        new JsonPlayerPrefsHandler(_saveKey, settings, GetDefaultJson);
 
         if (_log)
         {
             string text = ObjectLog.GetText(settings.Values, _saveKey);
             Debug.Log(text);
         }
+    }
+
+    private string GetDefaultJson ()
+    {
+        MementoSettings defaultSettings = new MementoSettings();
+        defaultSettings.Values = _default;
+        return defaultSettings.GetJson();
     }
 
     [ContextMenu("ClearData")]

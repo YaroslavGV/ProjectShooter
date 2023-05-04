@@ -6,7 +6,7 @@ using Memento;
 
 namespace Unit.Skin
 {
-    public class MementoPlayerSkins : IJsonContent
+    public class MementoPlayerSkins : PlayerSkins, IJsonContent
     {
         [Serializable]
         private struct SkinSaveData
@@ -23,38 +23,25 @@ namespace Unit.Skin
             public override string ToString () => "available: " + string.Join(", ", available) + Environment.NewLine + "selected:" + selected;
         }
 
-        private readonly PlayerSkins _skins;
+        public MementoPlayerSkins (IEnumerable<UnitSkin> collection, string defaultSkin = "") : base(collection, defaultSkin) => OnChanged += OnContentChange;
 
-        public MementoPlayerSkins (PlayerSkins skins)
-        {
-            _skins = skins;
-
-            _skins.OnChanged += OnChange;
-        }
-
-        ~MementoPlayerSkins () => _skins.OnChanged -= OnChange;
+        ~MementoPlayerSkins () => OnChanged -= OnContentChange;
 
         public Action ContentUpdated { get; set; }
 
-        public string GetJson ()
-        {
-            SkinSaveData saveData = new SkinSaveData(_skins.AvailableSkins, _skins.SelectedSkin.Key);
-            return JsonUtility.ToJson(saveData);
-        }
+        public string GetJson () => JsonUtility.ToJson(new SkinSaveData(available, selected));
 
         public void SetJson (string json)
         {
             SkinSaveData saveData = JsonUtility.FromJson<SkinSaveData>(json);
             if (saveData.available == null)
                 return;
-            
-            foreach (string skinKey in saveData.available)
-                _skins.SetAvailable(skinKey);
-            _skins.SelectSkin(saveData.selected);
+
+            available.Clear();
+            available.AddRange(saveData.available);
+            selected = saveData.selected;
         }
 
-        public void SetDefault () { }
-
-        private void OnChange () => ContentUpdated?.Invoke();
+        private void OnContentChange () => ContentUpdated?.Invoke();
     }
 }

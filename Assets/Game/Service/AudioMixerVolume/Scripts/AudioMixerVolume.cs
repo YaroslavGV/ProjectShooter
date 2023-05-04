@@ -5,30 +5,30 @@ public class AudioMixerVolume
 {
     public Action OnChange;
     private readonly AudioMixerReference _audio;
-    private AudioVolume _volume;
+    protected AudioVolume volume;
 
     public AudioMixerVolume (AudioMixerReference audio)
     {
         _audio = audio;
     }
 
-    public override string ToString () => string.Format("Music: {0}\nSFX: {1}", _volume.music, _volume.sfx);
+    public override string ToString () => string.Format("Music: {0}\nSFX: {1}", volume.music, volume.sfx);
 
     public AudioVolume Volume
     {
-        get => _volume;
+        get => volume;
         set
         {
-            _volume = value;
+            volume = value;
             UpdateAudioMixer();
             OnChange?.Invoke();
         }
     }
 
-    private void UpdateAudioMixer ()
+    protected void UpdateAudioMixer ()
     {
-        SetVolume(_audio.musicGroup.name, _volume.music);
-        SetVolume(_audio.sfxGroup.name, _volume.sfx);
+        SetVolume(_audio.musicGroup.name, volume.music);
+        SetVolume(_audio.sfxGroup.name, volume.sfx);
     }
 
     private void SetVolume (string groupName, float normalValue)

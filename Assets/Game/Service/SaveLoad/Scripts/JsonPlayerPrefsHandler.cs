@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Memento
 {
     public class JsonPlayerPrefsHandler : JsonMementroHandler
     {
-        public JsonPlayerPrefsHandler (string key, IJsonContent target, bool autoLoad = true) : 
-            base(key, target, autoLoad)
+        public JsonPlayerPrefsHandler (string key, IJsonContent target, Func<string> getDefaultJson = null, bool autoLoad = true) : 
+            base(key, target, getDefaultJson, autoLoad)
         {
         }
 
@@ -31,7 +32,8 @@ namespace Memento
 
         protected override void SetDefault ()
         {
-            target.SetDefault();
+            if (getDefaultJson != null)
+                target.SetJson(getDefaultJson());
         }
     }
 }

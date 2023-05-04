@@ -3,14 +3,14 @@
 public class GameSettings
 {
     public Action OnChange;
-    private SettingsValues _values;
+    protected SettingsValues values;
 
     public SettingsValues Values
     {
-        get => _values;
+        get => values;
         set
         {
-            _values = value;
+            values = value;
             OnChange?.Invoke();
         }
     }

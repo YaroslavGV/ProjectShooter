@@ -23,11 +23,10 @@ namespace Unit.Skin
                 throw new Exception("Skins is null");
 
             _skins.CheckKeyValid();
-            PlayerSkins skins = new PlayerSkins(_skins.Elements, _defaultSkin);
+            string defaultSkin = _defaultSkin != null ? _defaultSkin.Key : "";
+            MementoPlayerSkins skins = new MementoPlayerSkins(_skins.Elements, defaultSkin);
             Container.Bind<PlayerSkins>().FromInstance(skins).AsSingle();
-
-            MementoPlayerSkins mSkins = new MementoPlayerSkins(skins);
-            new JsonPlayerPrefsHandler(_saveKey, mSkins);
+            new JsonPlayerPrefsHandler(_saveKey, skins);
 
             if (_log)
             {

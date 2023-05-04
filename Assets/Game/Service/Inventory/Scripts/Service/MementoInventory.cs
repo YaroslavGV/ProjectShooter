@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using Memento;
 
 namespace InventorySystem
 {
-    public class MementoInventory : IJsonContent
+    public class MementoInventory : Inventory, IJsonContent
     {
         [Serializable]
         private struct ItemIDs
@@ -17,30 +16,26 @@ namespace InventorySystem
         }
 
         private readonly ItemsCollection _itemsDataBase;
-        private readonly Inventory _inventory;
-        private readonly IEnumerable<Item> _defaultItems;
-
-        public Action ContentUpdated { get; set; }
-
-        public MementoInventory (Inventory inventory, ItemsCollection itemsDataBase, IEnumerable<Item> defaultItems)
+        
+        public MementoInventory (ItemsCollection itemsDataBase)
         {
-            _inventory = inventory;
             _itemsDataBase = itemsDataBase;
-            _defaultItems = defaultItems;
-
-            _inventory.OnAdd += OnChange;
-            _inventory.OnRemove += OnChange;
+        
+            OnAdd += OnContentChange;
+            OnRemove += OnContentChange;
         }
 
         ~MementoInventory ()
         {
-            _inventory.OnAdd -= OnChange;
-            _inventory.OnRemove -= OnChange;
+            OnAdd -= OnContentChange;
+            OnRemove -= OnContentChange;
         }
+
+        public Action ContentUpdated { get; set; }
 
         public string GetJson ()
         {
-            int[] ids = _inventory.Items.Select(i => i.ID).ToArray();
+            int[] ids = items.Select(i => i.ID).ToArray();
             ItemIDs itemsID = new ItemIDs(ids);
             string json = JsonUtility.ToJson(itemsID);
             return json;
@@ -49,20 +44,15 @@ namespace InventorySystem
         public void SetJson (string json)
         {
             ItemIDs itemsID = JsonUtility.FromJson<ItemIDs>(json);
+            items.Clear();
             foreach (int id in itemsID.elements)
             {
                 Item item = _itemsDataBase.GetItem(id);
                 if (item != null)
-                    _inventory.AddItem(item);
+                    items.Add(item);
             }
         }
 
-        public void SetDefault ()
-        {
-            foreach (Item item in _defaultItems)
-                _inventory.AddItem(item.GetCopy());
-        }
-
-        private void OnChange (Item item) => ContentUpdated?.Invoke();
+        private void OnContentChange (Item item) => ContentUpdated?.Invoke();
     }
 }
