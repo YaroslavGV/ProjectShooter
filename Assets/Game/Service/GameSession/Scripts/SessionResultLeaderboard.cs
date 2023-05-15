@@ -10,7 +10,7 @@ namespace Session
         private GameSession _session;
         private Leaderboard _leaderboard;
 
-        private void Start ()
+        private void Awake ()
         {
             _session = GetComponent<GameSession>();
             _session.OnEnd += WriterResult;

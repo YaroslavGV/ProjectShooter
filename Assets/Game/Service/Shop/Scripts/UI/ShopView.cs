@@ -55,7 +55,7 @@ namespace Shop
                     _items.Add(itemView);
                 }
             }
-            _buyButton.gameObject.SetActive(false);
+            _buyButton.Disable();
         }
 
         private void ClearItems ()
@@ -70,7 +70,6 @@ namespace Shop
 
         private void OnSelect (ShopItem item)
         {
-            _buyButton.gameObject.SetActive(true);
             _buyButton.DisplayPrice(item);
         }
 
@@ -90,7 +89,7 @@ namespace Shop
                 {
                     ShopItemView itemView = GetViewOf(item);
                     itemView.Unavailable();
-                    _buyButton.gameObject.SetActive(false);
+                    _buyButton.Disable();
                 }
             }
             catch (ArgumentException e)

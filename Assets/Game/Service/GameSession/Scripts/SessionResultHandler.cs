@@ -11,7 +11,7 @@ namespace Session
         [SerializeField] private CanvasGroupRepresent _sticks;
         private GameSession _session;
         
-        private void Start ()
+        private void Awake ()
         {
             _session = GetComponent<GameSession>();
             _session.OnEnd += OnSessionEnd;

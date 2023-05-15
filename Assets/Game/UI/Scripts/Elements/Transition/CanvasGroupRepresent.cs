@@ -52,12 +52,15 @@ namespace UnityEngine.UI
             _group = GetComponent<CanvasGroup>();
             _rect = transform as RectTransform;
             _ancore = _rect.anchoredPosition;
-            AfterHide?.Invoke();
         }
 
         private void OnShowComplete () => _group.interactable = true;
 
-        private void OnHideComplete () => gameObject.SetActive(false);
+        private void OnHideComplete () 
+        { 
+            gameObject.SetActive(false);
+            AfterHide?.Invoke();
+        }
 
         private void DoTransition (AnimationTransition transition, Vector2 position, float alpha, TweenCallback onComplete)
         {

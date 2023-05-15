@@ -16,9 +16,14 @@ namespace Shop
         [SerializeField] private Graphic[] _colorTargets;
         [Space]
         [SerializeField] private Button _button;
+        [Space]
+        [SerializeField] private string _missItemPrice = "-";
+        [SerializeField] private Color _missItemColor = Color.white;
         private Wallet _wallet;
         private UnityAction _click;
         private ShopItem _item;
+
+        public Button Button => _button;
 
         private void OnEnable ()
         {
@@ -40,27 +45,40 @@ namespace Shop
             _wallet = wallet;
         }
 
-        public void DisplayPrice (ShopItem item)
+        public void Disable ()
         {
-            _item = item;
-            UpdateView(_item.Price);
+            _item = null;
+            UpdatePriceView(new CurrecnyValue());
             UpdatePurchaseAailability();
         }
 
-        private void UpdateView (CurrecnyValue price)
+        public void DisplayPrice (ShopItem item)
         {
-            CurrencyData currency = price.currency;
+            _item = item;
+            UpdatePriceView(_item.Price);
+            UpdatePurchaseAailability();
+        }
+
+        private void UpdatePriceView (CurrecnyValue price)
+        {
+            bool hasPrice = price.currency != null;
+            CurrencyData currency = hasPrice ? price.currency : null;
             if (_priceAmount != null)
-                _priceAmount.text = currency.GetFormatValue(price.value);
+                _priceAmount.text = hasPrice ? currency.GetFormatValue(price.value) : _missItemPrice;
             if (_currencyIcon != null)
-                _currencyIcon.sprite = currency.Icon;
+            {
+                _currencyIcon.enabled = hasPrice;
+                if (hasPrice)
+                    _currencyIcon.sprite = currency.Icon;
+            }
+            Color color = hasPrice ? currency.Color : _missItemColor;
             foreach (var target in _colorTargets)
-                target.color = currency.Color;
+                target.color = color;
         }
 
         private void UpdatePurchaseAailability ()
         {
-            _button.interactable = _wallet.FundsIsEnough(_item.Price);
+            _button.interactable = _item != null ? _wallet.FundsIsEnough(_item.Price) : false;
         }
 
         private void Click ()

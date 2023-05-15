@@ -27,6 +27,7 @@ namespace Session
 
         public void Begin ()
         {
+            Debug.Log("GameSession Begin");
             _duration = new Duration();
             _score = new Score();
             IsPlaying = true;
@@ -57,6 +58,7 @@ namespace Session
 
         public void Pause ()
         {
+            Debug.Log("Pause");
             if (IsPlaying == false)
             {
                 Debug.LogWarning("Can`t pause. Session not playing");
@@ -70,7 +72,8 @@ namespace Session
 
         public void Resume ()
         {
-            if (IsPaused)
+            Debug.Log("Resume");
+            if (IsPaused == false)
             {
                 Debug.LogWarning("Can`t resume. Session not paused");
                 return;

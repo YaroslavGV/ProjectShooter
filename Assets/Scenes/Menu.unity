@@ -7316,6 +7316,8 @@ MonoBehaviour:
   _colorTargets:
   - {fileID: 972437541}
   _button: {fileID: 2041957287}
+  _missItemPrice: 
+  _missItemColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &2047225984
 PrefabInstance:
   m_ObjectHideFlags: 0

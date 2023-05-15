@@ -20,7 +20,7 @@ namespace Unit
         {
             if (_process != null)
                 return;
-
+            
             _location = GetComponent<SpawnUnitLocation>();
             _process = SpawnProcess();
             StartCoroutine(_process);
